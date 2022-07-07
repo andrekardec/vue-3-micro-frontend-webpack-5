@@ -1,16 +1,29 @@
 <template>
   <div id="app">
+    <Toast :base-z-index="100" />
     <h1>{{ $t('hello') }}</h1>
     <Button @click="router.push({ name: 'home' })">Home</Button>
-     <Button @click="router.push({ name: 'test' })">Test</Button>
+    <Button @click="router.push({ name: 'test' })">Test</Button>
   </div>
 </template>
 
 <script setup lang="ts">
   import Button from 'primevue/button';
-
-  import { useRouter } from 'vue-router';  
+  import { onMounted } from 'vue';
+  import { useRouter } from 'vue-router'; 
+  import { useToast } from 'primevue/usetoast';
+  
   const router = useRouter();
+  const toast = useToast();
+
+  onMounted(() => {
+      toast.add({
+        severity: 'success',
+        detail: 'Successfully authenticated',
+        summary: 'Authentication',
+        life: 4000,
+      });
+  });
 
 </script>
 <style lang="scss">
@@ -25,6 +38,5 @@
   color: #2c3e50;
   margin-left: 5%;
   margin-right: 5%;
-  background-color: $yellow;
 }
 </style>

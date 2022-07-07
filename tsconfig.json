@@ -12,6 +12,7 @@
     "baseUrl": "./",
     "rootDir": ".",
     "outDir": "dist",
+    "jsx": "preserve",
     "paths": {
       "@modules/*": ["./src/modules/*"],
       "@providers/*": ["./src/providers/*"],
