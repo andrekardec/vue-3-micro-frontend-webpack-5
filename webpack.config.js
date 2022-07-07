@@ -13,7 +13,8 @@ module.exports = {
       directory: path.join(__dirname, './src/ui/public'),
     },
     compress: true,
-    port: 8081
+    port: 8081,
+    historyApiFallback: true
   },
   entry: "./src/ui/main.ts",
   devtool: 'inline-source-map',
@@ -29,8 +30,11 @@ module.exports = {
       },
       {
         test: /\.tsx?$/,
-        use: 'ts-loader',
         exclude: /node_modules/,
+        use: {
+          loader: 'ts-loader',
+          options: { appendTsSuffixTo: [/\.vue$/] },
+        }
       },
       {
         test: /\.m?js$/,
@@ -46,6 +50,10 @@ module.exports = {
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
+    alias: {
+      '@providers': path.resolve(__dirname, 'src', 'providers'),
+      '@ui': path.resolve(__dirname, 'src', 'ui'),
+    }
   },
   plugins: [
     new HtmlWebpackPlugin({
