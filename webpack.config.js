@@ -1,6 +1,7 @@
 const path = require("path");
 const { VueLoaderPlugin } = require("vue-loader");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
   mode: "development",
@@ -27,6 +28,36 @@ module.exports = {
       {
         test: /\.css$/,
         use: ["vue-style-loader", "css-loader"]
+      },
+      {
+        test: /\.s[a|c]ss$/i,
+        use: [
+          process.env.NODE_ENV !== "production"
+            ? "style-loader"
+            : MiniCssExtractPlugin.loader,
+          'css-loader',
+          'postcss-loader',
+          {
+            loader: "sass-loader",
+            options: {
+              api: "modern",
+              implementation: require.resolve("sass"),
+              sassOptions: {
+                fiber: false,
+                outputStyle: "compressed",
+                indentWidth: 4,
+                includePaths: "./src/sass",
+              },
+              sourceMap: true,
+            },
+          },
+          {
+            loader: "sass-resources-loader",
+            options: {
+              resources: "./src/ui/sass/main.scss"
+            }
+          }
+        ],
       },
       {
         test: /\.tsx?$/,
@@ -61,6 +92,13 @@ module.exports = {
       template: path.join(__dirname, './src/ui/public/index.html'),
       inject: true
     }),
+    new MiniCssExtractPlugin({
+      filename: "[name].css",
+      chunkFilename: "[id].css",
+    }),
     new VueLoaderPlugin()
-  ]
+  ],
+  stats: {
+    loggingDebug: ["sass-loader"],
+  },
 };
